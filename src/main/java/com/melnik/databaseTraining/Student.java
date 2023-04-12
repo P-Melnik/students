@@ -17,17 +17,17 @@ public class Student {
     private String name;
     private LocalDate dob;
     private String faculty;
-    private String studentStatus;
+    private StudentStatus studentStatus;
 
     public Student() {
     }
 
-    public Student(long id, String name, LocalDate dob, String faculty, String status) {
+    public Student(long id, String name, LocalDate dob, String faculty, StudentStatus studentStatus) {
         this.id = id;
         this.name = name;
         this.dob = dob;
         this.faculty = faculty;
-        this.studentStatus = status;
+        this.studentStatus = studentStatus;
     }
 
     public long getId() {
@@ -62,11 +62,11 @@ public class Student {
         this.faculty = faculty;
     }
 
-    public String getStatus() {
+    public StudentStatus getStatus() {
         return studentStatus;
     }
 
-    public void setStudentStatus(String studentStatus) {
+    public void setStudentStatus(StudentStatus studentStatus) {
         this.studentStatus = studentStatus;
     }
 

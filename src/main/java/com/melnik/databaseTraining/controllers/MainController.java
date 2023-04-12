@@ -19,14 +19,14 @@ public class MainController {
     private StudentsRepository studentsRepository;
 
 
-    @GetMapping("/")
+    @GetMapping(value = "/", produces = "application/json")
     public String getGreeting() {
         return "This is student information resource.\n" +
-                "To see all students go to /students\n" +
-                "To see all current students go to /current\n" +
-                "To see all graduated students go to /graduated\n" +
-                "To see all expelled students go to/expelled\n" +
-                "To see all students on vacation go to /vacation\n" +
+                "To see all students go to /student/all\n" +
+                "To see all current students go to student/current\n" +
+                "To see all graduated students go to student/graduated\n" +
+                "To see all expelled students go to student/expelled\n" +
+                "To see all students on vacation go to student/vacation\n" +
                 "To add new student print 'add'\n" +
                 "To delete student print 'delete'\n" +
                 "To edit print 'edit'";
@@ -34,37 +34,37 @@ public class MainController {
 
     @PostMapping("/")
     public RedirectView selection(@RequestBody String request) {
-        return new RedirectView("/" + request);
+        return new RedirectView("/student/" + request);
     }
 
-    @GetMapping("/students")
+    @GetMapping("/student/all")
     public List<Student> getAll() {
         List<Student> students = studentsRepository.findAll();
         return students;
     }
 
-    @GetMapping("/graduated")
+    @GetMapping("student/graduated")
     public List<Student> getGraduated() {
-        List<Student> students = studentsRepository.selectGraduated();
+        List<Student> students = studentsRepository.selectByStatus(0);
         return students;
     }
 
-
-    @GetMapping("/expelled")
-    public List<Student> getExpelled() {
-        List<Student> students = studentsRepository.selectExpelled();
-        return students;
-    }
-
-    @GetMapping("/vacation")
-    public List<Student> getOnVacation() {
-        List<Student> students = studentsRepository.selectVacation();
-        return students;
-    }
-
-    @GetMapping("/current")
+    @GetMapping("student/current")
     public List<Student> getCurrent() {
-        List<Student> students = studentsRepository.selectCurrent();
+        List<Student> students = studentsRepository.selectByStatus(1);
+        return students;
+    }
+
+
+    @GetMapping("student/expelled")
+    public List<Student> getExpelled() {
+        List<Student> students = studentsRepository.selectByStatus(2);
+        return students;
+    }
+
+    @GetMapping("student/vacation")
+    public List<Student> getOnVacation() {
+        List<Student> students = studentsRepository.selectByStatus(3);
         return students;
     }
 
