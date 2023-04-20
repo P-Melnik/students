@@ -9,14 +9,22 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public interface StudentsRepository extends JpaRepository<Student, Long> {
 
-    @Query(value = "select * from student where student_status = :status",
-    nativeQuery = true)
-    public List<Student> selectByStatus(@Param("status") int status);
+    @Query(value = "select * from student where student_status = :#{#status.getNum()}",
+            nativeQuery = true)
+    List<Student> list(@Param("status") StudentStatus status);
+
+    @Transactional // we get TransactionException without this annotation
+    @Modifying
+    @Query(value = "update student set name = :#{#student.getName()}, dob = :#{#student.getDob()}, " +
+            "faculty = :#{#student.getFaculty()}, student_status = :#{#student.getStatus().getNum()} " +
+            "where id = :id",
+            nativeQuery = true)
+    void update(@Param("id") long id, Student student);
+
 
 }

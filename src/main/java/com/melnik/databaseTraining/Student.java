@@ -22,8 +22,7 @@ public class Student {
     public Student() {
     }
 
-    public Student(long id, String name, LocalDate dob, String faculty, StudentStatus studentStatus) {
-        this.id = id;
+    public Student(String name, LocalDate dob, String faculty, StudentStatus studentStatus) {
         this.name = name;
         this.dob = dob;
         this.faculty = faculty;
