@@ -14,16 +14,15 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private String name;
+    private String fullName;
     private LocalDate dob;
     private String faculty;
     private StudentStatus studentStatus;
 
-    public Student() {
-    }
+    public Student() {}
 
-    public Student(String name, LocalDate dob, String faculty, StudentStatus studentStatus) {
-        this.name = name;
+    public Student(String fullName, LocalDate dob, String faculty, StudentStatus studentStatus) {
+        this.fullName = fullName;
         this.dob = dob;
         this.faculty = faculty;
         this.studentStatus = studentStatus;
@@ -37,12 +36,12 @@ public class Student {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public LocalDate getDob() {
@@ -61,7 +60,7 @@ public class Student {
         this.faculty = faculty;
     }
 
-    public StudentStatus getStatus() {
+    public StudentStatus getStudentStatus() {
         return studentStatus;
     }
 

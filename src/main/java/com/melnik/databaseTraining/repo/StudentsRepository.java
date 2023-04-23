@@ -14,14 +14,14 @@ import java.util.List;
 @Repository
 public interface StudentsRepository extends JpaRepository<Student, Long> {
 
-    @Query(value = "select * from student where student_status = :#{#status.getNum()}",
+    @Query(value = "select * from student where student_status = :#{#studentStatus.getNum()}",
             nativeQuery = true)
-    List<Student> list(@Param("status") StudentStatus status);
+    List<Student> list(@Param("studentStatus") StudentStatus studentStatus);
 
     @Transactional // we get TransactionException without this annotation
     @Modifying
-    @Query(value = "update student set name = :#{#student.getName()}, dob = :#{#student.getDob()}, " +
-            "faculty = :#{#student.getFaculty()}, student_status = :#{#student.getStatus().getNum()} " +
+    @Query(value = "update student set full_name = :#{#student.getFullName()}, dob = :#{#student.getDob()}, " +
+            "faculty = :#{#student.getFaculty()}, student_status = :#{#student.getStudentStatus().getNum()} " +
             "where id = :id",
             nativeQuery = true)
     void update(@Param("id") long id, Student student);
