@@ -18,7 +18,7 @@ public interface StudentsRepository extends JpaRepository<Student, Long> {
             nativeQuery = true)
     List<Student> list(@Param("studentStatus") StudentStatus studentStatus);
 
-    @Transactional // we get TransactionException without this annotation
+    @Transactional 
     @Modifying
     @Query(value = "update student set full_name = :#{#student.getFullName()}, dob = :#{#student.getDob()}, " +
             "faculty = :#{#student.getFaculty()}, student_status = :#{#student.getStudentStatus().getNum()} " +
