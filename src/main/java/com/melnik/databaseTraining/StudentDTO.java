@@ -1,34 +1,13 @@
 package com.melnik.databaseTraining;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
 import java.time.LocalDate;
 
-@Entity
-public class Student {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class StudentDTO {
     private long id;
-
     private String fullName;
     private LocalDate dob;
     private String faculty;
     private StudentStatus studentStatus;
-    private String address;
-    private String phoneNumber;
-
-    public Student() {}
-
-    public Student(String fullName, LocalDate dob, String faculty, StudentStatus studentStatus) {
-        this.fullName = fullName;
-        this.dob = dob;
-        this.faculty = faculty;
-        this.studentStatus = studentStatus;
-    }
 
     public long getId() {
         return id;
@@ -69,21 +48,4 @@ public class Student {
     public void setStudentStatus(StudentStatus studentStatus) {
         this.studentStatus = studentStatus;
     }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
 }

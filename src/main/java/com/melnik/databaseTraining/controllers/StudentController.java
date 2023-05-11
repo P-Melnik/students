@@ -1,8 +1,10 @@
 package com.melnik.databaseTraining.controllers;
 
 import com.melnik.databaseTraining.Student;
+import com.melnik.databaseTraining.StudentDTO;
 import com.melnik.databaseTraining.StudentStatus;
 import com.melnik.databaseTraining.repo.StudentsRepository;
+import com.melnik.databaseTraining.utils.StudentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/student")
@@ -19,16 +23,21 @@ public class StudentController {
     private StudentsRepository studentsRepository;
 
     @GetMapping
-    public List<Student> getAllOrByStatus(@RequestParam(required = false) StudentStatus studentStatus) {
+    public List<StudentDTO> getAllOrByStatus(@RequestParam(required = false) StudentStatus studentStatus) {
         if (studentStatus == null) {
-            return studentsRepository.findAll();
+            return studentsRepository.findAll().stream()
+                    .map(StudentMapper :: mapToStudentDTO)
+                    .collect(Collectors.toList());
         }
-        return studentsRepository.list(studentStatus);
+        return studentsRepository.list(studentStatus).stream()
+                .map(StudentMapper :: mapToStudentDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getByID(@PathVariable("id") long id) {
-        Optional<Student> student = studentsRepository.findById(id);
+    public ResponseEntity<StudentDTO> getByID(@PathVariable("id") long id) {
+        Optional<StudentDTO> student = studentsRepository.findById(id)
+                .map(StudentMapper :: mapToStudentDTO);
         return student.map(s -> ResponseEntity.ok().body(s))
                 .orElse(ResponseEntity.notFound().build());
     }

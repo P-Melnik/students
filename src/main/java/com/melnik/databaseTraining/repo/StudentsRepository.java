@@ -18,10 +18,11 @@ public interface StudentsRepository extends JpaRepository<Student, Long> {
             nativeQuery = true)
     List<Student> list(@Param("studentStatus") StudentStatus studentStatus);
 
-    @Transactional 
+    @Transactional
     @Modifying
     @Query(value = "update student set full_name = :#{#student.getFullName()}, dob = :#{#student.getDob()}, " +
             "faculty = :#{#student.getFaculty()}, student_status = :#{#student.getStudentStatus().getNum()} " +
+            ", address = :#{#student.getAddress}, phone_number = :#{#student.getPhoneNumber} " +
             "where id = :id",
             nativeQuery = true)
     void update(@Param("id") long id, Student student);
