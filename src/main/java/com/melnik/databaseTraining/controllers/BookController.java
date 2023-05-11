@@ -1,0 +1,57 @@
+package com.melnik.databaseTraining.controllers;
+
+import com.melnik.databaseTraining.Book;
+import com.melnik.databaseTraining.repo.BookRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/books")
+public class BookController {
+
+    @Autowired
+    private BookRepository bookRepository;
+
+    @GetMapping
+    public List<Book> findAll() {
+        return bookRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Book> findById(@PathVariable("id") long id) {
+        Optional<Book> book = bookRepository.findById(id);
+        return book.map(b -> ResponseEntity.ok().body(b))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<?> addBook(@RequestBody Book book) {
+        bookRepository.save(book);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editBook(@PathVariable("id") long id, @RequestBody Book book) {
+        if (bookRepository.existsById(id)) {
+            bookRepository.update(id, book);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteBook(@PathVariable("id") long id) {
+        if (bookRepository.existsById(id)) {
+            bookRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+}
