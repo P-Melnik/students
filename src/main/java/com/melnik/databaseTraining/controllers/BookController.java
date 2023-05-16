@@ -1,7 +1,9 @@
 package com.melnik.databaseTraining.controllers;
 
 import com.melnik.databaseTraining.Book;
+import com.melnik.databaseTraining.LibraryAccounting;
 import com.melnik.databaseTraining.repo.BookRepository;
+import com.melnik.databaseTraining.repo.LibraryAccountingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ public class BookController {
 
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private LibraryAccountingRepository libraryAccountingRepository;
 
     @GetMapping
     public List<Book> findAll() {
@@ -27,6 +31,16 @@ public class BookController {
         Optional<Book> book = bookRepository.findById(id);
         return book.map(b -> ResponseEntity.ok().body(b))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/borrowed")
+    public List<LibraryAccounting> findBorrowed() {
+        return libraryAccountingRepository.borrowed();
+    }
+
+    @GetMapping("/borrowed/all")
+    public List<LibraryAccounting> findBorrowedAndReturned() {
+        return libraryAccountingRepository.findAll();
     }
 
     @PostMapping

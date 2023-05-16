@@ -10,8 +10,17 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String bookName;
+    private String title;
     private int amount;
+    private int balanceAmount;
+
+    public int getBalanceAmount() {
+        return balanceAmount;
+    }
+
+    public void setBalanceAmount(int balanceAmount) {
+        this.balanceAmount = balanceAmount;
+    }
 
     public long getId() {
         return id;
@@ -21,12 +30,12 @@ public class Book {
         this.id = id;
     }
 
-    public String getBookName() {
-        return bookName;
+    public String getTitle() {
+        return title;
     }
 
-    public void setBookName(String bookName) {
-        this.bookName = bookName;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public int getAmount() {

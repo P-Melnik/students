@@ -1,43 +1,50 @@
 package com.melnik.databaseTraining.controllers;
 
-import com.melnik.databaseTraining.Student;
-import com.melnik.databaseTraining.StudentDTO;
-import com.melnik.databaseTraining.StudentStatus;
+import com.melnik.databaseTraining.*;
+import com.melnik.databaseTraining.repo.BookRepository;
+import com.melnik.databaseTraining.repo.LibraryAccountingRepository;
 import com.melnik.databaseTraining.repo.StudentsRepository;
+import com.melnik.databaseTraining.utils.LibraryService;
 import com.melnik.databaseTraining.utils.StudentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/students")
 public class StudentController {
 
     @Autowired
     private StudentsRepository studentsRepository;
 
+    @Autowired
+    private BookRepository bookRepository;
+
+    @Autowired
+    private LibraryAccountingRepository libraryAccountingRepository;
+
     @GetMapping
     public List<StudentDTO> getAllOrByStatus(@RequestParam(required = false) StudentStatus studentStatus) {
         if (studentStatus == null) {
             return studentsRepository.findAll().stream()
-                    .map(StudentMapper :: mapToStudentDTO)
+                    .map(StudentMapper::mapToStudentDTO)
                     .collect(Collectors.toList());
         }
         return studentsRepository.list(studentStatus).stream()
-                .map(StudentMapper :: mapToStudentDTO)
+                .map(StudentMapper::mapToStudentDTO)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<StudentDTO> getByID(@PathVariable("id") long id) {
         Optional<StudentDTO> student = studentsRepository.findById(id)
-                .map(StudentMapper :: mapToStudentDTO);
+                .map(StudentMapper::mapToStudentDTO);
         return student.map(s -> ResponseEntity.ok().body(s))
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -69,6 +76,40 @@ public class StudentController {
             return new ResponseEntity<>(HttpStatus.OK);
         } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @PostMapping("/{id}/books/{bookId}/borrow")
+    public ResponseEntity<?> addBook(@PathVariable("id") long id,
+                                        @PathVariable("bookId") long bookId) {
+        if (studentsRepository.existsById(id) && bookRepository.existsById(bookId)
+        && bookRepository.amount(bookId) > 0) {
+            libraryAccountingRepository.save(LibraryService.borrowBook(id, bookId));
+            bookRepository.balanceMinus(bookId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/{id}/books/{libraryId}/return")
+    public ResponseEntity<?> deleteBook(@PathVariable("id") long id,
+                                        @PathVariable("libraryId") long libraryId) {
+        if (studentsRepository.existsById(id)
+                && libraryAccountingRepository.existsById(libraryId)) {
+            libraryAccountingRepository.update(libraryId, LocalDate.now());
+            Optional<LibraryAccounting> libraryAccounting
+                    = libraryAccountingRepository.findById(libraryId);
+            bookRepository.balancePlus(libraryAccounting.get().getBookId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/{id}/borrowed")
+    public List<LibraryAccounting> borrowedByStudent(@PathVariable("id") long id) {
+        return libraryAccountingRepository.borrowedByStudent(id);
+    }
+
 
 }
 
