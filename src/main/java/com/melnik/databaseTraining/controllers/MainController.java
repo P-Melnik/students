@@ -18,7 +18,7 @@ public class MainController {
         return """
                 This is student information resource.
                 Yoy can see list of students, create edit and delete info
-                And see there payment status""";
+                Also added student's library information""";
     }
 
 }

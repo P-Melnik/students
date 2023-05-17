@@ -4,7 +4,6 @@ import com.melnik.databaseTraining.*;
 import com.melnik.databaseTraining.repo.BookRepository;
 import com.melnik.databaseTraining.repo.LibraryAccountingRepository;
 import com.melnik.databaseTraining.repo.StudentsRepository;
-import com.melnik.databaseTraining.utils.LibraryService;
 import com.melnik.databaseTraining.utils.StudentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -79,10 +78,14 @@ public class StudentController {
 
     @PostMapping("/{id}/books/{bookId}/borrow")
     public ResponseEntity<?> addBook(@PathVariable("id") long id,
-                                        @PathVariable("bookId") long bookId) {
-        if (studentsRepository.existsById(id) && bookRepository.existsById(bookId)
-        && bookRepository.amount(bookId) > 0) {
-            libraryAccountingRepository.save(LibraryService.borrowBook(id, bookId));
+                                     @PathVariable("bookId") long bookId) {
+        if (studentsRepository.existsById(id)
+                && bookRepository.existsById(bookId)
+                && bookRepository.amount(bookId) > 0
+                && libraryAccountingRepository.bookIsBorrowedByThisStudent(id, bookId) == null) {
+            LibraryAccounting libraryAccounting = new LibraryAccounting(id, bookId);
+            libraryAccounting.setBorrowDate(LocalDate.now());
+            libraryAccountingRepository.save(libraryAccounting);
             bookRepository.balanceMinus(bookId);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
@@ -90,15 +93,14 @@ public class StudentController {
         }
     }
 
-    @PutMapping("/{id}/books/{libraryId}/return")
+    @PutMapping("/{id}/books/{bookId}/return")
     public ResponseEntity<?> deleteBook(@PathVariable("id") long id,
-                                        @PathVariable("libraryId") long libraryId) {
+                                        @PathVariable("bookId") long bookId) {
+        long libraryId = libraryAccountingRepository.getLibraryId(id, bookId);
         if (studentsRepository.existsById(id)
                 && libraryAccountingRepository.existsById(libraryId)) {
             libraryAccountingRepository.update(libraryId, LocalDate.now());
-            Optional<LibraryAccounting> libraryAccounting
-                    = libraryAccountingRepository.findById(libraryId);
-            bookRepository.balancePlus(libraryAccounting.get().getBookId());
+            bookRepository.balancePlus(bookId);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

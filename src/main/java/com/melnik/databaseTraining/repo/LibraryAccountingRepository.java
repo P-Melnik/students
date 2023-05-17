@@ -27,4 +27,14 @@ public interface LibraryAccountingRepository extends JpaRepository<LibraryAccoun
     @Query(value = "select * from library_accounting where student_id = :studentId",
     nativeQuery = true)
     List<LibraryAccounting> borrowedByStudent(@Param("studentId") long id);
+
+    @Query(value = "select id from library_accounting where student_id = :studentId " +
+            "AND book_id = :bookId AND return_date is null",
+    nativeQuery = true)
+    long getLibraryId(@Param("studentId") long studentId, @Param("bookId") long bookId);
+
+    @Query(value = "select id from library_accounting where student_id = :studentId " +
+            "AND book_id = :bookId AND return_date is null",
+    nativeQuery = true)
+    Long bookIsBorrowedByThisStudent(@Param("studentId") long studentId, @Param("bookId") long bookId);
 }
