@@ -1,4 +1,4 @@
-package com.melnik.databaseTraining;
+package com.melnik.database_training;
 
 
 public enum StudentStatus {

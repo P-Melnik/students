@@ -1,6 +1,6 @@
-package com.melnik.databaseTraining.repo;
+package com.melnik.database_training.repo;
 
-import com.melnik.databaseTraining.LibraryAccounting;
+import com.melnik.database_training.LibraryAccounting;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

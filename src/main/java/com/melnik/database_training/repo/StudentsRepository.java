@@ -1,7 +1,7 @@
-package com.melnik.databaseTraining.repo;
+package com.melnik.database_training.repo;
 
-import com.melnik.databaseTraining.Student;
-import com.melnik.databaseTraining.StudentStatus;
+import com.melnik.database_training.Student;
+import com.melnik.database_training.StudentStatus;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

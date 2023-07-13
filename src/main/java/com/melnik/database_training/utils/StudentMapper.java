@@ -1,7 +1,7 @@
-package com.melnik.databaseTraining.utils;
+package com.melnik.database_training.utils;
 
-import com.melnik.databaseTraining.Student;
-import com.melnik.databaseTraining.StudentDTO;
+import com.melnik.database_training.Student;
+import com.melnik.database_training.StudentDTO;
 import org.springframework.stereotype.Service;
 
 @Service

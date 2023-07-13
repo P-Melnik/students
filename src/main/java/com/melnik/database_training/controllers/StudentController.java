@@ -1,10 +1,10 @@
-package com.melnik.databaseTraining.controllers;
+package com.melnik.database_training.controllers;
 
-import com.melnik.databaseTraining.*;
-import com.melnik.databaseTraining.repo.BookRepository;
-import com.melnik.databaseTraining.repo.LibraryAccountingRepository;
-import com.melnik.databaseTraining.repo.StudentsRepository;
-import com.melnik.databaseTraining.utils.StudentMapper;
+import com.melnik.database_training.*;
+import com.melnik.database_training.repo.BookRepository;
+import com.melnik.database_training.repo.LibraryAccountingRepository;
+import com.melnik.database_training.repo.StudentsRepository;
+import com.melnik.database_training.utils.StudentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
