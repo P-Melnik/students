@@ -9,6 +9,7 @@ public class DatabaseTrainingApplication {
 	public static void main(String[] args) {
 
 		SpringApplication.run(DatabaseTrainingApplication.class, args);
+
 	}
 
 }

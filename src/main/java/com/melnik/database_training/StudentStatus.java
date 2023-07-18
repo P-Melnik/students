@@ -2,11 +2,11 @@ package com.melnik.database_training;
 
 
 public enum StudentStatus {
-    GRADUATED(0),
-    CURRENT(1),
-    EXPELLED(2),
-    VACATION(3),
-    UNKNOWN(4);
+    UNKNOWN(0),
+    GRADUATED(1),
+    CURRENT(2),
+    EXPELLED(3),
+    VACATION(4);
 
     private final int num;
 
