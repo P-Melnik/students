@@ -1,6 +1,7 @@
 package com.melnik.database_training.controllers;
 
 import com.melnik.database_training.Book;
+import com.melnik.database_training.BookID;
 import com.melnik.database_training.LibraryAccounting;
 import com.melnik.database_training.repo.BookRepository;
 import com.melnik.database_training.repo.LibraryAccountingRepository;
@@ -44,9 +45,10 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> addBook(@RequestBody Book book) {
-        Book created = bookRepository.save(book);
-        return new ResponseEntity<>(created.getId(), HttpStatus.OK);
+    public ResponseEntity<BookID> addBook(@RequestBody Book book) {
+        Book newBook = bookRepository.save(book);
+        BookID created = new BookID(newBook.getId());
+        return new ResponseEntity<>(created, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

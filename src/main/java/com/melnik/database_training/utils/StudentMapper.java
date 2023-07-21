@@ -8,9 +8,8 @@ import org.springframework.stereotype.Service;
 public class StudentMapper {
 
     public static StudentDTO mapToStudentDTO(Student student) {
-        StudentDTO studentDTO = new StudentDTO(student.getId(), student.getFullName(),
-                student.getDob(), student.getFaculty(), student.getStudentStatus());
 
-        return studentDTO;
+        return new StudentDTO(student.getId(), student.getFullName(),
+                student.getDob(), student.getFaculty(), student.getStudentStatus());
     }
 }
