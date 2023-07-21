@@ -52,22 +52,20 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editBook(@PathVariable("id") long id, @RequestBody Book book) {
-        if (bookRepository.existsById(id)) {
-            bookRepository.update(id, book);
-            return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<String> editBook(@PathVariable("id") long id, @RequestBody Book book) {
+        if (bookRepository.update(id, book) != 0) {
+            return new ResponseEntity<>("Updated", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("NO SUCH BOOK ID", HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteBook(@PathVariable("id") long id) {
-        if (bookRepository.existsById(id)) {
-            bookRepository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<String> deleteBook(@PathVariable("id") long id) {
+        if (bookRepository.delete(id) != 0) {
+            return new ResponseEntity<>("Deleted", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("NO SUCH BOOK ID", HttpStatus.NOT_FOUND);
         }
     }
 }

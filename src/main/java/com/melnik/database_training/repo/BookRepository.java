@@ -17,7 +17,13 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query(value = "update book set title = :#{#book.getTitle}, amount = :#{#book.getAmount} " +
             "where id = :id",
     nativeQuery = true)
-    void update(@Param("id") long id, Book book);
+    int update(@Param("id") long id, Book book);
+
+    @Transactional
+    @Modifying
+    @Query(value = "delete from book where id = :id",
+            nativeQuery = true)
+    int delete(@Param("id") long id);
 
 
     @Query(value = "select balance_amount from book where id = :id",

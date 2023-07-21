@@ -25,7 +25,11 @@ public interface StudentsRepository extends JpaRepository<Student, Long> {
             ", address = :#{#student.getAddress}, phone_number = :#{#student.getPhoneNumber} " +
             "where id = :id",
             nativeQuery = true)
-    void update(@Param("id") long id, Student student);
+    int update(@Param("id") long id, Student student);
 
-
+    @Transactional
+    @Modifying
+    @Query(value = "delete from student where id = :id",
+    nativeQuery = true)
+    int delete(@Param("id") long id);
 }
