@@ -14,11 +14,21 @@ import java.util.List;
 @Repository
 public interface LibraryAccountingRepository extends JpaRepository<LibraryAccounting, Long> {
 
+
     @Transactional
     @Modifying
-    @Query(value = "update library_accounting set return_date = :date where id = :id",
+    @Query(value = "insert into library_accounting (book_id, student_id, borrow_date) " +
+            "values (:bookId, :studentId, :date)",
     nativeQuery = true)
-    void update(@Param("id") long id, LocalDate date);
+    void borrowBook(@Param("studentId") long studentId, @Param("bookId") long bookId,
+                   LocalDate date);
+
+    @Transactional
+    @Modifying
+    @Query(value = "delete from library_accounting where student_id = :studentId AND" +
+            " book_id = :bookId",
+    nativeQuery = true)
+    int returnBook(@Param("studentId") long studentId, @Param("bookId") long bookId);
 
     @Query (value = "select * from library_accounting where return_date is null",
     nativeQuery = true)

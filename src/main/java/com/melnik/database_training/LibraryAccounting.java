@@ -1,45 +1,61 @@
 package com.melnik.database_training;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
+
 
 @Entity
 public class LibraryAccounting {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long Id;
-    private long studentId;
-    private long bookId;
+    @EmbeddedId
+    StudentBookCompositeKey compositeKey;
+
+    @ManyToOne
+    @MapsId("studentId")
+    @JoinColumn(name = "student_id")
+    Student student;
+
+    @ManyToOne
+    @MapsId("bookId")
+    @JoinColumn(name = "book_id")
+    Book book;
+
     private LocalDate borrowDate;
     private LocalDate returnDate;
 
     LibraryAccounting() {}
 
-    public LibraryAccounting(long studentId, long bookId) {
-        this.studentId = studentId;
-        this.bookId = bookId;
+    public LibraryAccounting(StudentBookCompositeKey id, Student student, Book book, LocalDate borrowDate, LocalDate returnDate) {
+        this.compositeKey = id;
+        this.student = student;
+        this.book = book;
+        this.borrowDate = borrowDate;
+        this.returnDate = returnDate;
     }
 
-    public long getStudentId() {
-        return studentId;
+    public StudentBookCompositeKey getCompositeKey() {
+        return compositeKey;
     }
 
-    public void setStudentId(long studentId) {
-        this.studentId = studentId;
+    public void setCompositeKey(StudentBookCompositeKey compositeKey) {
+        this.compositeKey = compositeKey;
     }
 
-
-    public long getBookId() {
-        return bookId;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setBookId(long bookId) {
-        this.bookId = bookId;
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     public LocalDate getBorrowDate() {

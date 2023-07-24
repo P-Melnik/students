@@ -5,11 +5,15 @@ import com.melnik.database_training.repo.BookRepository;
 import com.melnik.database_training.repo.LibraryAccountingRepository;
 import com.melnik.database_training.repo.StudentsRepository;
 import com.melnik.database_training.utils.StudentMapper;
+import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.support.SQLErrorCodes;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -70,9 +74,9 @@ public class StudentController {
     @PutMapping("/{id}")
     public ResponseEntity<String> edit(@PathVariable("id") long id, @RequestBody Student student) {
         if (studentsRepository.update(id, student) != 0) {
-            return new ResponseEntity<>("Updated",HttpStatus.OK);
+            return new ResponseEntity<>("Updated", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("ERROR - NO SUCH STUDENT ID",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("ERROR - NO SUCH STUDENT ID", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -86,34 +90,27 @@ public class StudentController {
         }
     }
 
-    @PostMapping("/{id}/books/{bookId}/borrow")
-    public ResponseEntity<?> addBook(@PathVariable("id") long id,
-                                     @PathVariable("bookId") long bookId) {
-        if (studentsRepository.existsById(id)
-                && bookRepository.existsById(bookId)
-                && bookRepository.amount(bookId) > 0
-                && libraryAccountingRepository.bookIsBorrowedByThisStudent(id, bookId) == null) {
-            LibraryAccounting libraryAccounting = new LibraryAccounting(id, bookId);
-            libraryAccounting.setBorrowDate(LocalDate.now());
-            libraryAccountingRepository.save(libraryAccounting);
-            bookRepository.balanceMinus(bookId);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @PostMapping("/{studentId}/borrow/{bookId}")
+    public ResponseEntity<String> addBook(@PathVariable("studentId") long studentId,
+                                          @PathVariable("bookId") long bookId) {
+        LocalDate date = LocalDate.now();
+        try {
+            libraryAccountingRepository.borrowBook(studentId, bookId, date);
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>("WRONG ID OR BOOK IS ALREADY BORROWED", HttpStatus.NOT_FOUND);
         }
+        bookRepository.balanceMinus(bookId);
+        return new ResponseEntity<>("Successfully borrowed", HttpStatus.OK);
     }
 
-    @PutMapping("/{id}/books/{bookId}/return")
-    public ResponseEntity<?> deleteBook(@PathVariable("id") long id,
+    @PutMapping("/{studentId}/return/{bookId}")
+    public ResponseEntity<String> returnBook(@PathVariable("studentId") long studentId,
                                         @PathVariable("bookId") long bookId) {
-        long libraryId = libraryAccountingRepository.getLibraryId(id, bookId);
-        if (studentsRepository.existsById(id)
-                && libraryAccountingRepository.existsById(libraryId)) {
-            libraryAccountingRepository.update(libraryId, LocalDate.now());
+        if (libraryAccountingRepository.returnBook(studentId, bookId) != 0) {
             bookRepository.balancePlus(bookId);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("Returned", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("ERROR", HttpStatus.NOT_FOUND);
         }
     }
 
