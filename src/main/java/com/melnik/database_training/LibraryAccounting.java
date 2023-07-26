@@ -8,8 +8,9 @@ import java.time.LocalDate;
 @Entity
 public class LibraryAccounting {
 
+
     @EmbeddedId
-    StudentBookCompositeKey compositeKey;
+    StudentBookReturnDateCompositeKey compositeKey;
 
     @ManyToOne
     @MapsId("studentId")
@@ -21,12 +22,12 @@ public class LibraryAccounting {
     @JoinColumn(name = "book_id")
     Book book;
 
-    private LocalDate borrowDate;
     private LocalDate returnDate;
+    private LocalDate borrowDate;
 
     LibraryAccounting() {}
 
-    public LibraryAccounting(StudentBookCompositeKey id, Student student, Book book, LocalDate borrowDate, LocalDate returnDate) {
+    public LibraryAccounting(StudentBookReturnDateCompositeKey id, Student student, Book book, LocalDate borrowDate, LocalDate returnDate) {
         this.compositeKey = id;
         this.student = student;
         this.book = book;
@@ -34,11 +35,11 @@ public class LibraryAccounting {
         this.returnDate = returnDate;
     }
 
-    public StudentBookCompositeKey getCompositeKey() {
+    public StudentBookReturnDateCompositeKey getCompositeKey() {
         return compositeKey;
     }
 
-    public void setCompositeKey(StudentBookCompositeKey compositeKey) {
+    public void setCompositeKey(StudentBookReturnDateCompositeKey compositeKey) {
         this.compositeKey = compositeKey;
     }
 

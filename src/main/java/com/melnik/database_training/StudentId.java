@@ -1,4 +1,4 @@
 package com.melnik.database_training;
 
-public record StudentID(Long ID) {
+public record StudentId(Long id) {
 }

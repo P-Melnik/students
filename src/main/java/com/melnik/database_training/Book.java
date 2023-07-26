@@ -1,6 +1,7 @@
 package com.melnik.database_training;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 
 import java.util.Set;
 
@@ -15,6 +16,8 @@ public class Book {
 
     private String title;
     private int amount;
+
+    @Min(value = 0, message = "No books")
     private int balanceAmount;
 
     public int getBalanceAmount() {

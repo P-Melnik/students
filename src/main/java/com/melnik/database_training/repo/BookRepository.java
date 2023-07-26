@@ -25,10 +25,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             nativeQuery = true)
     int delete(@Param("id") long id);
 
-
-    @Query(value = "select balance_amount from book where id = :id",
-    nativeQuery = true)
-    int amount(@Param("id") long id);
+//    @Query(value = "select balance_amount from book where id = :id",
+//    nativeQuery = true)
+//    int amount(@Param("id") long id);
 
     @Transactional
     @Modifying

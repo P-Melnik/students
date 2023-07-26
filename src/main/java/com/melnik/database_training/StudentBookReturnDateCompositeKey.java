@@ -1,13 +1,12 @@
 package com.melnik.database_training;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class StudentBookCompositeKey implements Serializable {
+public class StudentBookReturnDateCompositeKey implements Serializable {
 
     @Column(name = "student_id")
     Long StudentId;
@@ -15,7 +14,8 @@ public class StudentBookCompositeKey implements Serializable {
     @Column(name = "book_id")
     Long BookId;
 
-    public StudentBookCompositeKey(Long studentId, Long bookId) {
+
+    public StudentBookReturnDateCompositeKey(Long studentId, Long bookId) {
         StudentId = studentId;
         BookId = bookId;
     }
@@ -40,7 +40,7 @@ public class StudentBookCompositeKey implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        StudentBookCompositeKey that = (StudentBookCompositeKey) o;
+        StudentBookReturnDateCompositeKey that = (StudentBookReturnDateCompositeKey) o;
         return Objects.equals(StudentId, that.StudentId) && Objects.equals(BookId, that.BookId);
     }
 
