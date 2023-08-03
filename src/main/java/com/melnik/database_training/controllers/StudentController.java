@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -116,7 +117,9 @@ public class StudentController {
 
     @GetMapping("/{id}/borrowed")
     public List<LibraryAccounting> borrowedByStudent(@PathVariable("id") long id) {
-        return libraryAccountingRepository.borrowedByStudent(id);
+        return libraryAccountingRepository.findAll().stream()
+                .filter(t -> t.getStudent().getId() == id)
+                .toList();
     }
 
 }

@@ -1,7 +1,7 @@
 package com.melnik.database_training.controllers;
 
 import com.melnik.database_training.Book;
-import com.melnik.database_training.BookID;
+import com.melnik.database_training.BookId;
 import com.melnik.database_training.LibraryAccounting;
 import com.melnik.database_training.repo.BookRepository;
 import com.melnik.database_training.repo.LibraryAccountingRepository;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/books")
@@ -36,7 +37,9 @@ public class BookController {
 
     @GetMapping("/borrowed")
     public List<LibraryAccounting> findBorrowed() {
-        return libraryAccountingRepository.borrowed();
+        return libraryAccountingRepository.findAll().stream()
+                .filter(t -> t.getReturnDate() == null)
+                .toList();
     }
 
     @GetMapping("/borrowed/all")
@@ -45,9 +48,9 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<BookID> addBook(@RequestBody Book book) {
+    public ResponseEntity<BookId> addBook(@RequestBody Book book) {
         Book newBook = bookRepository.save(book);
-        BookID created = new BookID(newBook.getId());
+        BookId created = new BookId(newBook.getId());
         return new ResponseEntity<>(created, HttpStatus.OK);
     }
 

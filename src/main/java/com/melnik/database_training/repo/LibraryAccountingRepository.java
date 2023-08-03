@@ -23,7 +23,7 @@ public interface LibraryAccountingRepository extends JpaRepository<LibraryAccoun
             "where library_accounting.book_id =:bookId and " +
             "library_accounting.student_id = :studentId " +
             "and library_accounting.return_date is not null",
-    nativeQuery = true)
+            nativeQuery = true)
     int borrowBook(@Param("studentId") long studentId, @Param("bookId") long bookId,
                    LocalDate date);
 
@@ -31,25 +31,27 @@ public interface LibraryAccountingRepository extends JpaRepository<LibraryAccoun
     @Modifying
     @Query(value = "update library_accounting set return_date = :date where " +
             "book_id = :bookId and student_id = :studentId and return_date is null",
-    nativeQuery = true)
+            nativeQuery = true)
     int returnBook(@Param("studentId") long studentId, @Param("bookId") long bookId,
                    LocalDate date);
 
-    @Query (value = "select * from library_accounting where return_date is null",
-    nativeQuery = true)
+    @Deprecated
+    @Query(value = "select * from library_accounting where return_date is null",
+            nativeQuery = true)
     List<LibraryAccounting> borrowed();
 
+    @Deprecated
     @Query(value = "select * from library_accounting where student_id = :studentId",
-    nativeQuery = true)
+            nativeQuery = true)
     List<LibraryAccounting> borrowedByStudent(@Param("studentId") long id);
 
     @Query(value = "select id from library_accounting where student_id = :studentId " +
             "AND book_id = :bookId AND return_date is null",
-    nativeQuery = true)
+            nativeQuery = true)
     long getLibraryId(@Param("studentId") long studentId, @Param("bookId") long bookId);
 
     @Query(value = "select id from library_accounting where student_id = :studentId " +
             "AND book_id = :bookId AND return_date is null",
-    nativeQuery = true)
+            nativeQuery = true)
     Long bookIsBorrowedByThisStudent(@Param("studentId") long studentId, @Param("bookId") long bookId);
 }

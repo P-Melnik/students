@@ -3,6 +3,7 @@ package com.melnik.database_training;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 
 @Entity
@@ -73,5 +74,18 @@ public class LibraryAccounting {
 
     public void setReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LibraryAccounting that = (LibraryAccounting) o;
+        return Objects.equals(compositeKey, that.compositeKey) && Objects.equals(student, that.student) && Objects.equals(book, that.book) && Objects.equals(returnDate, that.returnDate) && Objects.equals(borrowDate, that.borrowDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(compositeKey, student, book, returnDate, borrowDate);
     }
 }

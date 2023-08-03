@@ -9,31 +9,33 @@ import java.util.Objects;
 public class StudentBookReturnDateCompositeKey implements Serializable {
 
     @Column(name = "student_id")
-    Long StudentId;
+    Long studentId;
 
     @Column(name = "book_id")
-    Long BookId;
+    Long bookId;
 
+    public StudentBookReturnDateCompositeKey() {
+    }
 
     public StudentBookReturnDateCompositeKey(Long studentId, Long bookId) {
-        StudentId = studentId;
-        BookId = bookId;
+        this.studentId = studentId;
+        this.bookId = bookId;
     }
 
     public Long getStudentId() {
-        return StudentId;
+        return studentId;
     }
 
     public void setStudentId(Long studentId) {
-        StudentId = studentId;
+        this.studentId = studentId;
     }
 
     public Long getBookId() {
-        return BookId;
+        return bookId;
     }
 
     public void setBookId(Long bookId) {
-        BookId = bookId;
+        this.bookId = bookId;
     }
 
     @Override
@@ -41,11 +43,11 @@ public class StudentBookReturnDateCompositeKey implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StudentBookReturnDateCompositeKey that = (StudentBookReturnDateCompositeKey) o;
-        return Objects.equals(StudentId, that.StudentId) && Objects.equals(BookId, that.BookId);
+        return Objects.equals(studentId, that.studentId) && Objects.equals(bookId, that.bookId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(StudentId, BookId);
+        return Objects.hash(studentId, bookId);
     }
 }
